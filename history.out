@@ -1,0 +1,75 @@
+    1  ip a
+    2  nmcli connection show
+    3  hostnamectl set-hostname mephi-2026.domain.local
+    4  hostnamectl
+    5  ping -c 4 8.8.8.8 > ~/ping.out
+    6  cat ~/ping.out
+    7  dnf update -y
+    8  dnf install -y nginx libcap-ng-utils
+    9  dnf download --destdir=/tmp tcpdump
+   10  ls -l /tmp
+   11  rpm -ivh /tmp/tcpdump*.rpm
+   12  dnf history > ~/dnf.out
+   13  lsblk
+   14  fdisk /dev/nvme0n2
+   15  mkfs.ext4 -L MEPHI_WEB /dev/nvme0n2p1
+   16  blkid
+   17  mkdir /mephi-web
+   18  vi /etc/fstab
+   19  cat /etc/fstab
+   20  systemctl daemon-reload
+   21  mount -a
+   22  df -h
+   23  systemctl start nginx
+   24  systemctl enable nginx
+   25  systemctl status nginx
+   26  journalctl -u nginx -b > ~/journalctl.out
+   27  mkdir -p /data/mephi-2026
+   28  groupadd -g 5500 developers
+   29  groupadd -g 4444 curators
+   30  useradd -u 5501 -G developers user1
+   31  useradd -u 5502 -G developers user2
+   32  useradd -u 5503 -G developers user3
+   33  useradd -g 4444 -G curators curator1
+   34  useradd -g 4444 -G curators curator2
+   35  chown root:developers /data/mephi-2026
+   36  chmod 2770 /data/mephi-2026
+   37  setfacl -m g:developers:rwx,g:curators:rx,o::--- /data/mephi-2026
+   38  setfacl -d -m g:developers:rwx,g:curators:rx,o::--- /data/mephi-2026
+   39  getfacl /data/mephi-2026
+   40  which tcpdump
+   41  chmod u-s /usr/sbin/tcpdump
+   42  setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
+   43  getcap /usr/sbin/tcpdump
+   44  sudo -u user1 tcpdump -c 4
+   45  getenforce
+   46  vi /etc/nginx/nginx.conf
+   47  semanage fcontext -a -t httpd_sys_content_t '/mephi-web(/.*)?'
+   48  restorecon -Rv /mephi-web
+   49  usermod -s /sbin/nologin curator1
+   50  usermod -s /sbin/nologin curator2
+   51  vi /etc/security/pwquality.conf
+   52  vi /etc/login.defs
+   53  passwd user1
+   54  passwd user2
+   55  passwd user3
+   56  passwd curator1
+   57  passwd curator2
+   58  chage -M 90 user1
+   59  chage -M 90 user2
+   60  chage -M 90 user3
+   61  chage -M 90 curator1
+   62  chage -M 90 curator2
+   63  echo "Hello from Student: М265919" > /mephi-web/index.html
+   64  restorecon -Rv /mephi-web
+   65  systemctl restart nginx
+   66  curl http://localhost/
+   67  ping -c 4 8.8.8.8 > ~/ping.out
+   68  stat /data/mephi-2026 > ~/stat.out
+   69  getcap /usr/sbin/tcpdump > ~/getcap.out
+   70  dnf history > ~/dnf.out
+   71  journalctl -u nginx -b > ~/journalctl.out
+   72  getenforce > ~/getenforce.out
+   73  stat /mephi-web >> ~/stat.out
+   74  curl http://localhost/ > ~/curl.out
+   75  history > ~/history.out
